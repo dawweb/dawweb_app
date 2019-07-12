@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { Transport } from 'tone';
 
+/* Tone.Transport.defaults with 'playbackState', 'position', and 'loop' added */
 const initialTransportState = {
     playbackState: 'stopped',
     position: '0:0:0',
@@ -15,15 +16,16 @@ const initialTransportState = {
   };
 
 const transportReducer = (transportState, transportAction) => {
-  transportReducer.actions = {
+  /* Handle Transport actions here */
+  transportReducer.dispatcher = {
     togglePlaybackState: () => {
       Transport.state === 'started' ? Transport.pause() : Transport.start()
-      console.log('Transport state', Transport.state);
+      console.log('Transport.state:', Transport.state);
       return { ...transportState, playbackState: Transport.state };
     },
     stopPlayback: () => {
       Transport.stop()
-      console.log('Transport state', Transport.state);
+      console.log('Transport.state:', Transport.state);
       return { ...transportState, playbackState: Transport.state };
     },
     setBpm: (newBpm) => {
@@ -36,44 +38,60 @@ const transportReducer = (transportState, transportAction) => {
       } else {
         Transport.bpm.value = newBpm;
       }
-      console.log('Transport BPM', Transport.bpm.value);
+      console.log('Transport.bpm.value:', Transport.bpm.value);
       return { ...transportState, bpm: Transport.bpm.value }
-    }
+    },
+    /* 
+      setPosition >>> split bars:beats:sixteenths into separate state properties?,
+      setSwing >>> value between 0 - 1,
+      setSwingSubdivision >>> subdivision must be < '4n',
+      setTimeSignature >>> numerator over 4,
+      setLoopStart,
+      setLoopEnd,
+      setPPQ >>> hopefully we get to MIDI implementation ;)
+     */
   }
 
-  if (transportAction.type in transportReducer.actions) {
-    return transportReducer.actions[transportAction.type](transportState, transportAction);
+  if (transportAction.type in transportReducer.dispatcher) {
+    return transportReducer.dispatcher[transportAction.type](transportState, transportAction);
   } else {
     console.error(`${transportAction.type} not handled in TransportReducer`);
   }
   return transportState;
 }
 
-const TransportContext = createContext();
-const TransportProvider = ({ children }) => {
+/* Provide Contexts and... */
+const TransportStateContext = createContext();
+const TransportDispatchContext = createContext()
+export const TransportProvider = ({ children }) => {
+  const [transportState, transportDispatch] = useReducer(transportReducer, initialTransportState)
   return (
-    <TransportContext.Provider value={useReducer(transportReducer, initialTransportState)}>
-      { children }
-    </TransportContext.Provider>
+    <TransportStateContext.Provider value={transportState}>
+      <TransportDispatchContext.Provider value={transportDispatch}>
+        { children }
+      </TransportDispatchContext.Provider>
+    </TransportStateContext.Provider>
   )
 }
 
-const useAssignContext = (stateProperty) => {
-  const context = useContext(TransportContext)
-  if (context === undefined) {
-    console.error('useBpm within TransportProvider')
+/* ...consume them within the appropriate Provider */
+const useContextValidation = (contextObj, stateProperty) => {
+  const context = useContext(contextObj)
+  if (stateProperty) {
+    if (context === undefined) {
+      console.error(`Use ${stateProperty} hook within the appropriate Provider!`)
+    }
+    return context[stateProperty]
   }
-  const [state, dispatch] = context
-  return [state[stateProperty], dispatch]
+  if (context === undefined) {
+    console.error('Provide context object or use within the appropriate Provider')
+  }
+  return context
 }
 
-export const usePlayback = () => {
-  return useAssignContext('playbackState')
-}
+export default function useTransportDispatch () { useContextValidation(TransportDispatchContext) }
 
-export const useBpm = () => {
-  return useAssignContext('bpm')
-}
+/* State Hooks */
+export const usePlayback = () => useContextValidation(TransportStateContext, 'playbackState')
 
-
-export default TransportProvider;
+export const useBpm = () => useContextValidation(TransportStateContext, 'bpm')

@@ -1,10 +1,11 @@
 import React from 'react';
-import { usePlayback } from '../context/TransportContext';
+import useTransportDispatch, { usePlayback } from '../context/TransportContext';
 import '../../styles/transportStyles.css';
 
 const Transport = (props) => {
-  const [ playbackState, dispatch ] = usePlayback()
-  console.log(playbackState);
+  const playbackState = usePlayback()
+  const dispatch = useTransportDispatch()
+  console.log('playbackState:', playbackState);
   return (
     <>
       <div

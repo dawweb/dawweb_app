@@ -1,6 +1,6 @@
 import React from 'react'
+import { TransportProvider } from './context/TransportContext';
 import Transport from './components/Transport';
-import TransportProvider from './context/TransportContext';
 
 export default function DAW() {
   return (
