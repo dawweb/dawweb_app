@@ -25,6 +25,19 @@ const transportReducer = (transportState, transportAction) => {
       Transport.stop()
       console.log('Transport state', Transport.state);
       return { ...transportState, playbackState: Transport.state };
+    },
+    setBpm: (newBpm) => {
+      if (isNaN(newBpm)) {
+        newBpm = transportState.bpm
+      } else if (newBpm < 30) {
+        Transport.bpm.value = 30
+      } else if (newBpm > 300) {
+        Transport.bpm.value = 300
+      } else {
+        Transport.bpm.value = newBpm;
+      }
+      console.log('Transport BPM', Transport.bpm.value);
+      return { ...transportState, bpm: Transport.bpm.value }
     }
   }
 
@@ -45,13 +58,22 @@ const TransportProvider = ({ children }) => {
   )
 }
 
-export const usePlayback = () => {
+const useAssignContext = (stateProperty) => {
   const context = useContext(TransportContext)
   if (context === undefined) {
-    console.error('Use playback within TransportProvider')
+    console.error('useBpm within TransportProvider')
   }
   const [state, dispatch] = context
-  return [state.playbackState, dispatch]
+  return [state[stateProperty], dispatch]
 }
+
+export const usePlayback = () => {
+  return useAssignContext('playbackState')
+}
+
+export const useBpm = () => {
+  return useAssignContext('bpm')
+}
+
 
 export default TransportProvider;
