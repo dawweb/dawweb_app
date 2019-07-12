@@ -1,0 +1,13 @@
+.play-pause-button-container {
+  flex: 1;
+  background-color: lightblue;
+  text-align: center;
+  justify-content: center;
+}
+
+.stop-button-container {
+  flex: 1;
+  background-color: lightcoral;
+  text-align: center;
+  justify-content: center;
+}

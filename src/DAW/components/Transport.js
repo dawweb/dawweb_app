@@ -1,13 +1,28 @@
 import React from 'react';
 import { usePlayback } from '../context/TransportContext';
+import '../../styles/transportStyles.css';
 
 const Transport = (props) => {
-  const context = usePlayback()
-  console.log(context);
+  const [ playbackState, dispatch ] = usePlayback()
+  console.log(playbackState);
   return (
-    <div>
-      <p>Hello from Transport!</p>
-    </div>
+    <>
+      <div
+        className="increment-tempo"
+        onMouseDown={() => {}}
+      >
+      </div>
+      <div
+        className="play-pause-button-container"
+        onMouseDown={() => dispatch({type: 'togglePlaybackState'})}>
+        <p>Play/Pause</p>
+      </div>
+      <div
+        className="stop-button-container"
+        onMouseDown={() => dispatch({type: 'stopPlayback'})}>
+        <p>Stop</p>
+      </div>
+    </>
   )
 }
 
