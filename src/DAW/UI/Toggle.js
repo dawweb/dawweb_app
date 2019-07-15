@@ -1,14 +1,16 @@
 import React from 'react'
 
-const Toggle = ({ className, callback, innerText }) => {
+const Toggle = ({ callback, className, innerText }) => {
+  const handleMouseDown = e => {
+    e.preventDefault()
+    callback()
+  }
+
   return (
     <button
       type="button"
       className={className}
-      onMouseDown={e => {
-        e.preventDefault()
-        callback()
-      }}
+      onMouseDown={handleMouseDown}
     >
       {innerText}
     </button>

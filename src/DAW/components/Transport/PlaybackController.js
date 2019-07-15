@@ -8,12 +8,12 @@ const PlaybackController = () => {
   return (
     <div className="controller-playback">
       <Toggle
-        className={`togglePlayback ${playbackState}`}
+        className={`play-pause ${playbackState}`}
         callback={() => dispatch({ type: 'togglePlaybackState' })}
         innerText="❙▶"
       />
       <Toggle
-        className={`stopPlayback ${playbackState}`}
+        className={`stop ${playbackState}`}
         callback={() => dispatch({ type: 'stopPlayback' })}
         innerText="■"
       />
