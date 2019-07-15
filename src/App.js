@@ -1,10 +1,8 @@
 import React from 'react';
-import DAW from './DAW/DAW'
+import DAW from './DAW/DAW';
 
 function App() {
-  return (
-    <DAW />
-  );
+  return <DAW />;
 }
 
 export default App;

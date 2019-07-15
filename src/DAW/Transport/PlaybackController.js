@@ -1,10 +1,10 @@
-import React from 'react'
-import { useTransportDispatch, usePlaybackState } from '../../context/TransportContext'
-import Toggle from '../../UI/Toggle'
+import React from 'react';
+import useTransportDispatch, { usePlaybackState } from './hooks';
+import Toggle from '../UI/Toggle';
 
 const PlaybackController = () => {
-  const playbackState = usePlaybackState()
-  const dispatch = useTransportDispatch()
+  const playbackState = usePlaybackState();
+  const dispatch = useTransportDispatch();
   return (
     <div className="controller-playback">
       <Toggle
@@ -18,7 +18,7 @@ const PlaybackController = () => {
         innerText="■"
       />
     </div>
-  )
-}
+  );
+};
 
-export default PlaybackController
+export default PlaybackController;

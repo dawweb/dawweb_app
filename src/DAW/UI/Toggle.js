@@ -1,20 +1,16 @@
-import React from 'react'
+import React from 'react';
 
 const Toggle = ({ callback, className, innerText }) => {
   const handleMouseDown = e => {
-    e.preventDefault()
-    callback()
-  }
+    e.preventDefault();
+    callback();
+  };
 
   return (
-    <button
-      type="button"
-      className={className}
-      onMouseDown={handleMouseDown}
-    >
+    <button type="button" className={className} onMouseDown={handleMouseDown}>
       {innerText}
     </button>
-  )
-}
+  );
+};
 
-export default Toggle
+export default Toggle;

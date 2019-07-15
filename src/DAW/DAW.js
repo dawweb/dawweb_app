@@ -1,6 +1,6 @@
-import React from 'react'
-import TransportProvider from './context/TransportContext';
-import Transport from './components/Transport/Transport';
+import React from 'react';
+import TransportProvider from './Transport/context/TransportContext';
+import Transport from './Transport/Transport';
 
 const DAW = () => {
   return (
@@ -9,7 +9,7 @@ const DAW = () => {
         <Transport />
       </TransportProvider>
     </div>
-  )
-}
+  );
+};
 
-export default DAW
+export default DAW;

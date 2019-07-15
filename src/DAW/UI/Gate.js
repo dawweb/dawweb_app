@@ -1,37 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const Gate = ({ callback, className, innerText, interval, timeout }) => {
-  const [activeState, setActiveState] = useState('')
-  
-  let gateInterval, gateTimeout
+  const [activeState, setActiveState] = useState('');
+
+  let gateInterval, gateTimeout;
   const handleMouseDown = e => {
-    e.preventDefault()
-    setActiveState('active')
+    e.preventDefault();
+    setActiveState('active');
     if (timeout) {
-      clearTimeout(gateTimeout)
+      clearTimeout(gateTimeout);
       gateTimeout = setTimeout(() => {
         if (interval) {
           gateInterval = setInterval(() => {
-            callback()
-          }, interval)
+            callback();
+          }, interval);
         }
-        callback()
-      }, timeout)
+        callback();
+      }, timeout);
     }
-    callback()
-  }
+    callback();
+  };
 
   const handleMouseUp = () => {
-    setActiveState('')
-    clearTimeout(gateTimeout)
-    clearInterval(gateInterval)
-  }
+    setActiveState('');
+    clearTimeout(gateTimeout);
+    clearInterval(gateInterval);
+  };
 
   const handleMouseLeave = () => {
-    setActiveState('')
-    clearTimeout(gateTimeout)
-    clearInterval(gateInterval)
-  }
+    setActiveState('');
+    clearTimeout(gateTimeout);
+    clearInterval(gateInterval);
+  };
 
   return (
     <button
@@ -43,7 +43,7 @@ const Gate = ({ callback, className, innerText, interval, timeout }) => {
     >
       {innerText}
     </button>
-  )
-}
+  );
+};
 
-export default Gate
+export default Gate;
