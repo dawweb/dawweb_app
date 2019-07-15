@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { Transport } from 'tone';
 
-/* Tone.Transport.defaults with 'playbackState', 'position', and 'loop' added */
+/* Tone.Transport.defaults with 'playbackState', 'position', 'loop', and 'metronome' added */
 const initialTransportState = {
     playbackState: 'stopped',
     position: '0:0:0',
     loop: false,
+    metronome: false,
     bpm: 120,
     swing: 0,
     swingSubdivision: '8n',
@@ -55,7 +56,7 @@ const transportReducer = (transportState, transportAction) => {
   if (transportAction.type in transportReducer.dispatcher) {
     return transportReducer.dispatcher[transportAction.type](transportState, transportAction);
   } else {
-    console.error(`${transportAction.type} not handled in TransportReducer`);
+    console.error(`${transportAction.type} not handled in transportReducer`);
   }
   return transportState;
 }
@@ -63,7 +64,7 @@ const transportReducer = (transportState, transportAction) => {
 /* Provide Contexts and... */
 const TransportStateContext = createContext();
 const TransportDispatchContext = createContext()
-export const TransportProvider = ({ children }) => {
+const TransportProvider = ({ children }) => {
   const [transportState, transportDispatch] = useReducer(transportReducer, initialTransportState)
   return (
     <TransportStateContext.Provider value={transportState}>
@@ -76,22 +77,25 @@ export const TransportProvider = ({ children }) => {
 
 /* ...consume them within the appropriate Provider */
 const useContextValidation = (contextObj, stateProperty) => {
-  const context = useContext(contextObj)
+const context = useContext(contextObj)
   if (stateProperty) {
     if (context === undefined) {
-      console.error(`Use ${stateProperty} hook within the appropriate Provider!`)
+      console.error(`${stateProperty} cannot be consumed outside of its Provider`)
     }
     return context[stateProperty]
   }
   if (context === undefined) {
-    console.error('Provide context object or use within the appropriate Provider')
+    console.error(`Dispatch cannot be used outside of its Provider`)
   }
   return context
 }
 
-export default function useTransportDispatch () { useContextValidation(TransportDispatchContext) }
+/* Dispatch Hook */
+export const useTransportDispatch = () => useContextValidation(TransportDispatchContext)
 
 /* State Hooks */
-export const usePlayback = () => useContextValidation(TransportStateContext, 'playbackState')
+export const usePlaybackState = () => useContextValidation(TransportStateContext, 'playbackState')
 
 export const useBpm = () => useContextValidation(TransportStateContext, 'bpm')
+
+export default TransportProvider
