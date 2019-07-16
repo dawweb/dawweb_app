@@ -3,18 +3,28 @@ import useTransportDispatch, { usePlaybackState } from './hooks';
 import Toggle from '../UI/Toggle';
 
 const PlaybackController = () => {
-  const playbackState = usePlaybackState();
   const dispatch = useTransportDispatch();
+  const playbackState = usePlaybackState();
+
+  /* Action Creators */
+  const handleTogglePlaybackState = () => {
+    dispatch({ type: 'togglePlaybackState' });
+  };
+
+  const handleStopPlayback = () => {
+    dispatch({ type: 'stopPlayback' });
+  };
+
   return (
     <div className="controller-playback">
       <Toggle
-        className={`play-pause ${playbackState}`}
-        callback={() => dispatch({ type: 'togglePlaybackState' })}
+        callback={handleTogglePlaybackState}
+        className={`playback-toggle ${playbackState}`}
         innerText="❙▶"
       />
       <Toggle
-        className={`stop ${playbackState}`}
-        callback={() => dispatch({ type: 'stopPlayback' })}
+        callback={handleStopPlayback}
+        className={`playback-stop ${playbackState}`}
         innerText="■"
       />
     </div>

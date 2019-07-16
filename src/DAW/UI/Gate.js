@@ -1,45 +1,28 @@
 import React, { useState } from 'react';
+import { useInterval } from '../../utilities'
 
-const Gate = ({ callback, className, innerText, interval, timeout }) => {
-  const [activeState, setActiveState] = useState('');
+const Gate = ({ callback, className, innerText, interval }) => {
+  const [gateOpen, setGateOpen] = useState(false);
+  const { startInterval, stopInterval } = useInterval(callback, interval)
 
-  let gateInterval, gateTimeout;
-  const handleMouseDown = e => {
-    e.preventDefault();
-    setActiveState('active');
-    if (timeout) {
-      clearTimeout(gateTimeout);
-      gateTimeout = setTimeout(() => {
-        if (interval) {
-          gateInterval = setInterval(() => {
-            callback();
-          }, interval);
-        }
-        callback();
-      }, timeout);
-    }
-    callback();
-  };
+  const handleGateOpen = e => {
+    e.preventDefault()
+    startInterval()
+    setGateOpen(true)
+  }
 
-  const handleMouseUp = () => {
-    setActiveState('');
-    clearTimeout(gateTimeout);
-    clearInterval(gateInterval);
-  };
-
-  const handleMouseLeave = () => {
-    setActiveState('');
-    clearTimeout(gateTimeout);
-    clearInterval(gateInterval);
-  };
+  const handleGateClosed = () => {
+    stopInterval()
+    setGateOpen(false)
+  }
 
   return (
     <button
       type="button"
-      className={`${className} ${activeState}`}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
+      className={`${className} ${gateOpen}`}
+      onMouseDown={handleGateOpen}
+      onMouseUp={handleGateClosed}
+      onMouseLeave={handleGateClosed}
     >
       {innerText}
     </button>

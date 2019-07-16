@@ -2,7 +2,7 @@ import {
   TransportStateContext,
   TransportDispatchContext,
 } from './context/TransportContext';
-import { useContextValidation } from '../utilities';
+import { useContextValidation } from '../../utilities';
 
 /* State Hooks */
 export const usePlaybackState = () =>

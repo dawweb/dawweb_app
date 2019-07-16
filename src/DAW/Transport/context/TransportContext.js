@@ -1,9 +1,9 @@
 import React, { createContext, useReducer } from 'react';
 import initialTransportState from './initialTransportState';
 import transportDispatcher from './transportDispatcher';
-import { assignReducerDispatcher, reducer } from '../../utilities';
+import { assignDispatcher, reducer } from '../../../utilities';
 
-assignReducerDispatcher(reducer, transportDispatcher);
+assignDispatcher(reducer, transportDispatcher);
 
 export const TransportStateContext = createContext();
 export const TransportDispatchContext = createContext();
